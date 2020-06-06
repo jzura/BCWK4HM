@@ -13,11 +13,13 @@ var gameLost = false;
 function renderQuestion() {
 
 
-    //var test = document.getElementById("test");
+    //Make sure test isnt complete
     if (pos >= questions.length) {
 
         //Stop Time 
-        clearInterval(downloadTimer); 
+        clearInterval(downloadTimer);
+        
+        //Display results
         $("#test_results").append("<h2>You got " + correct + " of " + questions.length + " questions correct</h2>");
         $("#test_status").html("Test Completed");
 
@@ -54,6 +56,7 @@ function renderQuestion() {
 
 
 function checkAnswer() {
+
     // use getElementsByName because we have an array which it will loop through
     choices = document.getElementsByName("choices");
     for (var i = 0; i < choices.length; i++) {
@@ -61,13 +64,20 @@ function checkAnswer() {
             choice = choices[i].value;
         }
     }
+
     // checks if answer matches the correct choice
     if (choice == questions[pos].answer) {
+
+        //Add extra time
+        timeleft += 5;
+
         //each time there is a correct answer this value increases
         correct++;
     }
+
     // changes position of which character user is on
     pos++;
+
     // then the renderQuestion function runs again to go to next question
     if(gameLost == false) {
         renderQuestion();
@@ -78,13 +88,21 @@ function checkAnswer() {
 
 //Timer function
 function myTimer() {
+
+    //If time runs out
     if (timeleft == 0) {
+
+        //Display results
         $("#test_results").append("<h2>You got " + correct + " of " + questions.length + " questions correct</h2>");
         $("#test_status").html("Test Completed");
+
+        //Hide rendered question
         $("#test").hide();
+
         // resets the variable to allow users to restart the test
         pos = 0;
         correct = 0;
+
         // stops rest of renderQuestion function running when test is completed
         gameLost = true;
         clearInterval(downloadTimer);
