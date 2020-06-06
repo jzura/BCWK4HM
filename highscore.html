@@ -32,16 +32,20 @@
         <div id="quiz">
             <div class="row" style="">
                 <div class="col-lg-12 text-center">
-                    <h2 id="test_status"></h2>
+                    <h2>High Scores</h2>
                     <div id="high-scores" style="display: none;">
-                        <form action="highscore.html" style="display: inline-flex;" id="form">
-                            <label for="initial">Enter Initials:</label><br>
+                        <form action="" style="display: none;" id="form">
+                            <label for="init">Enter Initials:</label><br>
                             <input type="text" id="init" name="init"><br>
                             <input type="submit" value="Submit" onclick="addHighScore()">
                         </form>
                     </div>
-                    <div id="test"></div>
-                    <h2 id="test_results"></h2>
+                    <p class="lead">
+                        <a class="btn btn-primary btn-lg" href="quiz.html" role="button">Go Back</a>
+                    </p>
+                    <p class="lead">
+                        <a class="btn btn-primary btn-lg" href="quiz.html" role="button">Clear High Scores</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -62,6 +66,19 @@
 
     <!--Main javascript-->
     <script src="question.js"></script>
+
+    <!--Get data from local storage-->
+    <script>
+
+        clearInterval(downloadTimer);
+
+        $("#high-scores").show();
+
+        var name = localStorage.getItem("initials");
+        var highscore = localStorage.getItem("scores");
+        
+        $("#high-scores").append("<h3> Name: " + name + " Score: " + highscore);
+    </script>
 
 
 </body>

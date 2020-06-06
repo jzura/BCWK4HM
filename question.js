@@ -5,6 +5,11 @@ var pos = 0, test, test_status, question, choice, choices, chA, chB, chC, correc
 var timeleft = 10;
 var downloadTimer = setInterval(myTimer, 1000);
 
+
+//Score
+var score = 0;
+var savedscore = score;
+
 //Game Booleans
 var gameLost = false;
 
@@ -19,12 +24,16 @@ function renderQuestion() {
         //Stop Time 
         clearInterval(downloadTimer);
         
+
         //Display results
-        $("#test_results").append("<h2>You got " + correct + " of " + questions.length + " questions correct</h2>");
-        $("#test_status").html("Test Completed");
+        $("#test_status").html("All done");
+        $("#test_status").append("<br> Your score: " + score);
+        $("#high-scores").show();
+
 
         //Hide Quiz
         $("#test").hide();
+        $("#timespent").hide();
 
         // resets the variable to allow users to restart the test
         pos = 0;
@@ -35,7 +44,7 @@ function renderQuestion() {
         return false;
     }
 
-    //document.getElementById("test_status").innerHTML = "Question " + (pos + 1) + " of " + questions.length;
+    // what question you are up too
     $("#test_status").html("Question " + (pos + 1) + " of " + questions.length);
 
     var question = questions[pos].question;
@@ -48,13 +57,12 @@ function renderQuestion() {
 
 
     // display the answer options
-    $("#test").append("<label> <input type='radio' name='choices' value='A'> " + chA + "</label><br>");
-    $("#test").append("<label> <input type='radio' name='choices' value='B'> " + chB + "</label><br>");
-    $("#test").append("<label> <input type='radio' name='choices' value='C'> " + chC + "</label><br><br>");
-    $("#test").append("<button onclick='checkAnswer()'>Submit Answer</button>")
+    $("#test").append("<label> <input type='radio' onclick='checkAnswer()' name='choices' value='A'> " + chA + "</label><br>");
+    $("#test").append("<label> <input type='radio' onclick='checkAnswer()' name='choices' value='B'> " + chB + "</label><br>");
+    $("#test").append("<label> <input type='radio' onclick='checkAnswer()' name='choices' value='C'> " + chC + "</label><br><br>");
 }
 
-
+// check if answer is correct
 function checkAnswer() {
 
     // use getElementsByName because we have an array which it will loop through
@@ -71,6 +79,10 @@ function checkAnswer() {
         //Add extra time
         timeleft += 5;
 
+        //Add score
+        score += 5;
+
+
         //each time there is a correct answer this value increases
         correct++;
     }
@@ -79,9 +91,9 @@ function checkAnswer() {
     pos++;
 
     // then the renderQuestion function runs again to go to next question
-    if(gameLost == false) {
+    if (gameLost == false) {
         renderQuestion();
-    } 
+    }
 };
 
 
@@ -92,12 +104,15 @@ function myTimer() {
     //If time runs out
     if (timeleft == 0) {
 
+
         //Display results
-        $("#test_results").append("<h2>You got " + correct + " of " + questions.length + " questions correct</h2>");
-        $("#test_status").html("Test Completed");
+        $("#test_status").html("All done");
+        $("#test_status").append("<br> Your score: " + score);
+        $("#high-scores").show();
 
         //Hide rendered question
         $("#test").hide();
+        $("#timespent").hide();
 
         // resets the variable to allow users to restart the test
         pos = 0;
@@ -108,12 +123,13 @@ function myTimer() {
         clearInterval(downloadTimer);
         return false;
     }
-    document.getElementById("timespent").value = timeleft;
+    //render time left on page
+    $("#timespent").html("Time: " + timeleft);
     timeleft -= 1;
 };
 
 
-// this is a multidimensional array with 4 inner array elements with 5 elements inside them
+// multidimensial question array
 var questions = [
     {
         question: "What is 36 + 42",
@@ -144,6 +160,12 @@ var questions = [
         answer: "C"
     }
 ];
+
+function addHighScore() {
+    var input = $("#init");
+    localStorage.setItem("initials", input.val());
+    localStorage.setItem("scores", score);
+};
 
 // Add event listener to call renderQuestion on page load event
 window.addEventListener("load", renderQuestion);
